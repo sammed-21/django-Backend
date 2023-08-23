@@ -6,5 +6,4 @@ def test(request):
     return render(request,'blog/base.html')
 
 
-def blog(request):
-    return HttpResponse("hello here i am with a new blog")
+ 
