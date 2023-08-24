@@ -1,21 +1,25 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserCreateForm
 from django.views.decorators.csrf import csrf_exempt
 from .jwt_utils import generate_jwt_token
 
-
-
+def user(request):
+    return render(request, 'users/base.html')
+def login(request):
+    return render(request,"users/login.html")
+def signup(request):
+    return render(request,"users/signup.html")
 @csrf_exempt
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreateForm(request.POST)
         if form.is_valid():  
             user = form.save()
-            return JsonResponse({"message": "User registered successfully"})
+            return JsonResponse({"message":user})
         else:
-            return JsonResponse({'error': 'Invalid registration data'}, status=400)
+            return JsonResponse({'errors': form.errors}, status=400)
 
 @csrf_exempt
 def login_view(request):

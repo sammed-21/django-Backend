@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import BlogPost , Comment
 
 
-@login_required
+# @login_required
 @csrf_exempt
 def create_blog_post(request):
     if request.method == "POST":
@@ -16,7 +16,7 @@ def create_blog_post(request):
         blog_post = BlogPost.objects.create(title=title,content=content,author=author)
         Comment.objects.create(content=content, author=author, blog_post=blog_post)
         return JsonResponse({'message': 'Comment created successfully'})
-
+    return render(request,'blog/home.html')
 @login_required
 @csrf_exempt
 
@@ -29,8 +29,8 @@ def create_comments(request,blog_post_id):
         return JsonResponse({'message': 'Comment created successfully'})
 def list_blog_posts(request):
     blog_post = BlogPost.objects.all()
-    data =[{title:post.title, 'content':post.content} for post in blog_post]
-    JsonResponse(data,safe=False)
+    data =[{'title':post.title, 'content':post.content} for post in blog_post]
+    return JsonResponse(data,safe=False)
     
     
 def list_comments(request,blog_post_id):
